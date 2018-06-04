@@ -10,55 +10,60 @@ private:
 	int feet;
 	int inches;
 public:
-	void setvalue(int ft, int in);
+	void setvalue(int fe, int in);
 	void display();
 	//CFeet add(CFeet & objf);
-	CFeet operator+(CFeet & objf);
+	CFeet operator-(CFeet & objf);
 };
-void CFeet::setvalue(int ft, int in)
+void CFeet::setvalue(int fe, int in)
 {
-	feet = ft+in/12;
-	inches = in%12;
+	feet = fe;
+	inches = in;
 }
 void CFeet::display()
 {
 	cout << feet << "英尺" << inches << "英寸" << endl;
 }
-/*{
-	if (inches < 0)
-	{
-		cout << inches / 12 << "英尺" << -inches % 12 << "英寸" << endl;
-	}
-	if (inches > 0)
-	{
-		cout << inches / 12 << "英尺" << inches % 12 << "英寸" << endl;
-	}
-}
-/*CFeet CFeet::add(CFeet & objf)  //objf是对象引用b
-{
-CFeet temp;
-temp.setvalue(feet + objf.feet, inches + objf.inches);
-return temp;
-}*/
-CFeet CFeet::operator+(CFeet & objf)
+CFeet CFeet::operator-(CFeet &objf)
 {
 	CFeet temp;
 	if (feet > 0)
 	{
-		temp.setvalue(0, inches = (feet * 12 + inches) - (objf.feet * 12 + objf.inches));
+		temp.setvalue(inches = feet * 12 + inches, objf.inches = objf.feet * 12 + objf.inches);
+		if (inches < objf.inches)
+		{
+			temp.inches = (inches - objf.inches) % 12;
+			if (temp.inches < 0)
+			{
+				temp.inches = inches*(-1);
+			}
+		}
+		else
+		{
+			temp.inches = (inches - objf.inches) % 12;
+			if (temp.inches < 0)
+			{
+				temp.inches = inches*(-1);
+			}
+		}
+
+		temp.feet = (inches - objf.inches) / 12;
 	}
-	else
+	if (feet < 0)
 	{
-		temp.setvalue(0, inches = (feet * 12 - inches) - (objf.feet * 12 + objf.inches));
+		temp.setvalue(inches = feet * 12 - inches, objf.inches = objf.feet * 12 + objf.inches);
+		temp.inches = (inches - objf.inches) % 12 * (-1);
 	}
+	temp.feet = (inches - objf.inches) / 12;
 	return temp;
 }
 int main()
 {
 	CFeet A, B, C;
-	A.setvalue(-2, 3);
-	B.setvalue(2, 3);
-	C = A + B; //有CFeet CFeet::operator+(CFeet & objf)的时候能用c=a+b ，有CFeet CFeet::add(CFeet & objf)时用c=a.add(b)
+	A.setvalue(-3, 2);
+	B.setvalue(1, 5);
+	C = A - B;
 	C.display();
 	return 0;
 }
+
